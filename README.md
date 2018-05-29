@@ -1,3 +1,3 @@
-# vehicle-selling-business-net
+# consensus-system-business-network 
 
-Basik business network for a vehicle selling business 
+Basik business network for consensus between patient and doctor 

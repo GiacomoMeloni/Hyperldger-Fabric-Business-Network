@@ -18,25 +18,40 @@
 
 namespace org.basicnet
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
+abstract concept Address {
+  o String street
+  o String city default ="Winchester"
+  o String country default = "UK"
+  o Integer[] counts optional
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
+participant Patient identified by cfP{
+  o String cfP
+  o String name
+  o String surname
+  o DateTime date_of_birth
+  o String place_of_birth 
+  o Address adress 
 }
 
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
+participant Doctor identified by cfD{
+  o String cfD
+  o String name 
+  o String surname
+  o String reference_hospital
+  o String city_hospital
+  --> Patient[] list_of_patients
 }
 
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
+enum type_of_request {
+  o REQUEST
+  o CONFIRMATION
 }
+
+asset Consensus_format identified by reqID {
+  o String reqID
+  o type_of_request type
+  --> Doctor doctor
+  --> Patient patient
+}
+
