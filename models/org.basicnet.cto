@@ -137,7 +137,7 @@ event Emit_request {
   confermare la delega verso un dottore per l'accesso alle informazioni cliniche.
  */
 
-transaction health_confirmation {
+transaction Health_confirmation {
   o DateTime confirmation_date
   --> Patient from
   --> Doctor to 
@@ -161,7 +161,10 @@ event Emit_confirmation {
   (IT) Transazione usata per controllare se la delega è ancora valida.
  */
 
-transaction check_delegation {
+transaction Check_delegation {
 
 }
 
+transaction Setup_Demo {
+
+}
