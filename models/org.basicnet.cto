@@ -13,17 +13,30 @@
  */
 
 /**
- * Write your model definitions here
+ * (EN) DEFINITION OF HEALTH CONSENSUS MODEL.
+ * (IT) DEFINIZIONE DEL MODELLO DI CONSENSO SANITARIO.
  */
 
 namespace org.basicnet
+/**
+  (EN)abstract concept for the definition of the address field.
 
+  (IT)concept astratto utilizzato per la definizione del campo indirizzo.
+*/
 abstract concept Address {
   o String street
   o String civico
   o String city default ="Rome"
   o String country default = "IT"
 }
+
+/**
+  (EN) Definition of the patient as participant in the business network, 
+  identified by the tax code and with some basic info.
+
+  (IT) Definizione del paziente come partecipante nel business network,
+  identificato dal codice fiscale e con alcune informazioni di base.
+*/
 
 participant Patient identified by cfP{
   o String cfP
@@ -34,32 +47,70 @@ participant Patient identified by cfP{
   o Address address 
 }
 
+/**
+  (EN) Definition of the doctor as participant in the business network, 
+  identified by the tax code and with some basic info;
+  created a list of patients so as to be able to access more easily based on 
+  those who gave consent to the request for delegation.
+
+  (IT) Definizione del dottore come participante nel business network,
+  identificato dal codice fiscale e con alcune informazioni di base;
+  creata una lista di pazienti in modo da facilitare l'accesso in base a chi 
+  ha dato il consenso alla richiesta di delega. 
+*/
+
 participant Doctor identified by cfD{
   o String cfD
   o String name 
   o String surname
   o String reference_hospital
-  o String city_hospital
+  o String city_hospital optional
   --> Patient[] list_of_patients
 }
 
-enum type_of_request {
+/**enum type_of_request {
   o REQUEST
   o CONFIRMATION
-}
+}*/
 
-asset Concession identified by id {
+/**
+  (EN) The delegation created as an asset to track the single one
+   among all those accepted by the patient, contains a reference to the doctor,
+   the start and end date which determines the period of validity of the proxy.
+
+  (IT) La delega creata come asset in modo da tracciare la singola delega 
+  tra tutte quelle accettate dal paziente, contiente un riferimento al dottore,
+  la data di inizio e di fine che determina il periodo di validità della delega.
+ */
+
+asset Delegation identified by id {
   o String id 
-  o Doctor Doctor
+  --> Doctor Doctor
   o DateTime start 
   o DateTime finish
 }
 
+/**
+  (EN) The health pass is a digital booklet that belongs to a patient,
+  it is identified by an internal ID and contains the list of all the delegations.
+
+  (IT) Il pass sanitario è un libretto digitale che appartiene ad un paziente, 
+  viene identificato da un ID interno e contiene la lista di tutte le deleghe.
+ */
+
 asset Health_Pass identified by hpid{
   o String hpid 
   --> Patient owner 
-  --> Concession[] delegation
+  --> Delegation[] delegations
 }
+
+/**
+  (EN) transaction to make a request from a doctor for
+  have a patient's delegation for access to clinical information.
+
+  (IT) transazione per effettuare una richiesta da parte di un dottore per 
+  avere la delega da parte di un paziente per l'accesso alle informazioni cliniche.
+*/
 
 transaction Health_request {
   o DateTime request_date 
@@ -67,10 +118,24 @@ transaction Health_request {
   --> Patient to 
 }
 
+/**
+    (EN) Event used to signal the request for delegation to a patient.
+
+    (IT) Evento utilizzato per la segnalazione di effettuata richiesta di delega
+    verso un paziente.
+ */
+
 event Emit_request {
   o String detail
-  --> Doctor sender
+  --> Patient receiver
 }
+
+/**
+  (EN) transaction to confirm a patient's delegation to a doctor for access to clinical information.
+
+  (IT) transazione per effettuare una conferma da parte di un paziente per 
+  confermare la delega verso un dottore per l'accesso alle informazioni cliniche.
+ */
 
 transaction health_confirmation {
   o DateTime confirmation_date
@@ -78,10 +143,23 @@ transaction health_confirmation {
   --> Doctor to 
 }
 
+/**
+    (EN) Event used to signal the confirmation for delegation to a doctor.
+
+    (IT) Evento utilizzato per la segnalazione di conferma di delega
+    verso un dottore.
+ */
+
 event Emit_confirmation {
   o String detail
-  --> Patient sender
+  --> Doctor receiver
 }
+
+/**
+  (EN) Transaction used to check if the delegation is still valid.
+
+  (IT) Transazione usata per controllare se la delega è ancora valida.
+ */
 
 transaction check_delegation {
 
