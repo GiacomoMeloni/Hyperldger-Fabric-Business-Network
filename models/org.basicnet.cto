@@ -48,12 +48,42 @@ enum type_of_request {
   o CONFIRMATION
 }
 
+asset Concession identified by id {
+  o String id 
+  o Doctor Doctor
+  o DateTime start 
+  o DateTime finish
+}
+
 asset Health_Pass identified by hpid{
   o String hpid 
   --> Patient owner 
-  --> Doctor concession
-  o DateTime start 
-  o DateTime finish  
+  --> Concession[] delegation
 }
 
+transaction Health_request {
+  o DateTime request_date 
+  --> Doctor from 
+  --> Patient to 
+}
+
+event Emit_request {
+  o String detail
+  --> Doctor sender
+}
+
+transaction health_confirmation {
+  o DateTime confirmation_date
+  --> Patient from
+  --> Doctor to 
+}
+
+event Emit_confirmation {
+  o String detail
+  --> Patient sender
+}
+
+transaction check_delegation {
+
+}
 
