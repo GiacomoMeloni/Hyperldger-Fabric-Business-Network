@@ -20,9 +20,9 @@ namespace org.basicnet
 
 abstract concept Address {
   o String street
-  o String city default ="Winchester"
-  o String country default = "UK"
-  o Integer[] counts optional
+  o String civico
+  o String city default ="Rome"
+  o String country default = "IT"
 }
 
 participant Patient identified by cfP{
@@ -31,7 +31,7 @@ participant Patient identified by cfP{
   o String surname
   o DateTime date_of_birth
   o String place_of_birth 
-  o Address adress 
+  o Address address 
 }
 
 participant Doctor identified by cfD{
@@ -48,10 +48,12 @@ enum type_of_request {
   o CONFIRMATION
 }
 
-asset Consensus_format identified by reqID {
-  o String reqID
-  o type_of_request type
-  --> Doctor doctor
-  --> Patient patient
+asset Health_Pass identified by hpid{
+  o String hpid 
+  --> Patient owner 
+  --> Doctor concession
+  o DateTime start 
+  o DateTime finish  
 }
+
 
