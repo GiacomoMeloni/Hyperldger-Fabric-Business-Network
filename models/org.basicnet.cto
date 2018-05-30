@@ -23,12 +23,12 @@ namespace org.basicnet
 
   (IT)concept astratto utilizzato per la definizione del campo indirizzo.
 */
-abstract concept Address {
-  o String street
-  o String civico
-  o String city default ="Rome"
-  o String country default = "IT"
-}
+// abstract concept Address {
+//   o String street
+//   o String civico
+//   o String city default ="Rome"
+//   o String country default = "IT"
+// }
 
 /**
   (EN) Definition of the patient as participant in the business network, 
@@ -43,8 +43,8 @@ participant Patient identified by cfP{
   o String name
   o String surname
   o DateTime date_of_birth
-  o String place_of_birth 
-  o Address address 
+  // o String place_of_birth 
+  // o Address address 
 }
 
 /**
@@ -63,9 +63,9 @@ participant Doctor identified by cfD{
   o String cfD
   o String name 
   o String surname
-  o String reference_hospital
-  o String city_hospital optional
-  --> Patient[] list_of_patients
+  // o String reference_hospital
+  // o String city_hospital optional
+  --> Patient[] list_of_patients 
 }
 
 /**enum type_of_request {
