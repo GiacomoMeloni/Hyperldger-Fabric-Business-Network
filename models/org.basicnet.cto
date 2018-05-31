@@ -68,10 +68,10 @@ participant Doctor identified by cfD{
   --> Patient[] list_of_patients 
 }
 
-/**enum type_of_request {
-  o REQUEST
-  o CONFIRMATION
-}*/
+enum State {
+  o CONFIRMED
+  o WAITING
+}
 
 /**
   (EN) The delegation created as an asset to track the single one
@@ -84,24 +84,12 @@ participant Doctor identified by cfD{
  */
 
 asset Delegation identified by id {
-  o String id 
-  --> Doctor Doctor
+  o String id
+  --> Patient patient 
+  --> Doctor doctor
+  o State state
   o DateTime start 
   o DateTime finish
-}
-
-/**
-  (EN) The health pass is a digital booklet that belongs to a patient,
-  it is identified by an internal ID and contains the list of all the delegations.
-
-  (IT) Il pass sanitario è un libretto digitale che appartiene ad un paziente, 
-  viene identificato da un ID interno e contiene la lista di tutte le deleghe.
- */
-
-asset Health_Pass identified by hpid{
-  o String hpid 
-  --> Patient owner 
-  --> Delegation[] delegations
 }
 
 /**
@@ -137,8 +125,8 @@ event Emit_request {
   confermare la delega verso un dottore per l'accesso alle informazioni cliniche.
  */
 
-transaction Health_confirmation {
-  o DateTime confirmation_date
+transaction Health_delegation {
+  o DateTime delegation_date
   --> Patient from
   --> Doctor to 
 }
