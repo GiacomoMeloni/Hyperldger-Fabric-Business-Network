@@ -90,6 +90,7 @@ asset Delegation identified by dlID {
   o State state
   o DateTime start 
   o DateTime finish
+  o String otp
 }
 
 /**
@@ -100,7 +101,7 @@ asset Delegation identified by dlID {
   avere la delega da parte di un paziente per l'accesso alle informazioni cliniche.
 */
 
-transaction Health_request {
+transaction Delegation_request {
   o DateTime request_date 
   --> Doctor from 
   --> Patient to 
@@ -125,7 +126,7 @@ event Emit_request {
   confermare la delega verso un dottore per l'accesso alle informazioni cliniche.
  */
 
-transaction Health_delegation {
+transaction Delegation_confirmation {
   o DateTime delegation_date
   --> Patient from
   --> Doctor to 
@@ -151,8 +152,17 @@ event Emit_confirmation {
 
 transaction Check_delegation {
     --> Doctor doctor
+    --> Delegation delegation
+}
+
+transaction Destroy_delegation {
+    --> Delegation delegation
 }
 
 transaction Setup_Demo {
 
+}
+
+event Emit_allert_delegation {
+    --> Delegation delegation
 }
