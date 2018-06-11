@@ -65,7 +65,7 @@ participant Doctor identified by cfD{
   o String surname
   // o String reference_hospital
   // o String city_hospital optional
-  o String[] list_of_patients 
+  o Patient[] list_of_patients 
 }
 
 enum State {

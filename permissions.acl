@@ -31,6 +31,24 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
+rule DoctorRuleNetwork {
+  description: "Basic rule for doctors to see network"
+  participant: "org.basicnet.Doctor"
+  operation: READ
+  resource: "org.hyperledger.composer.system.**"
+  condition: (d.getIdentifier() === d.getIDentifier())
+  action:ALLOW
+}
+
+rule DoctorRule {
+  description: "Basic rule for doctors"
+  participant(d): "org.basicnet.Doctor"
+  operation: READ
+  resource(d): "org.basicnet.Doctor"
+  condition: (d.getIdentifier() === d.getIDentifier())
+  action:ALLOW
+}
+
 rule DoctorCanSeeOnlyHisPatients {
   description: "Restricts the access of doctors to data only of delegated patients"
   participant(doc): "org.basicnet.Doctor"
@@ -41,3 +59,5 @@ rule DoctorCanSeeOnlyHisPatients {
         }))
   action: ALLOW
 }
+
+
