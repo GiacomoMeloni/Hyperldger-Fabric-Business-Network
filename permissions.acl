@@ -30,3 +30,14 @@ rule NetworkAdminSystem {
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
 }
+
+rule DoctorCanSeeOnlyHisPatients {
+  description: "Restricts the access of doctors to data only of delegated patients"
+  participant(doc): "org.basicnet.Doctor"
+  operation: READ
+  resource(pat): "org.basicnet.Patient"
+  condition: (doc.list_of_patients.some(function (patient) {
+        return patient.getIdentifier() === pat.getIdentifier();  
+        }))
+  action: ALLOW
+}

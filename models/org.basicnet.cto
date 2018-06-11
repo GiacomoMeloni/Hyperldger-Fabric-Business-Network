@@ -65,7 +65,7 @@ participant Doctor identified by cfD{
   o String surname
   // o String reference_hospital
   // o String city_hospital optional
-  --> Patient[] list_of_patients 
+  o String[] list_of_patients 
 }
 
 enum State {
@@ -115,7 +115,7 @@ transaction Delegation_request {
  */
 
 event Emit_request {
-  o String detail
+  o String detail 
   --> Patient receiver
 }
 
@@ -128,9 +128,9 @@ event Emit_request {
 
 transaction Delegation_confirmation {
   o DateTime delegation_date
-  --> Patient from
+  --> Patient from 
   --> Doctor to 
-}
+  }
 
 /**
     (EN) Event used to signal the confirmation for delegation to a doctor.
