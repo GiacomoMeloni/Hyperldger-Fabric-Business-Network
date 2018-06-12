@@ -47,5 +47,3 @@ query selectDelegationFromCFPat {
   statement:
       SELECT org.basicnet.Delegation WHERE (patient.cfP == _$CFP)
 }
-
-
