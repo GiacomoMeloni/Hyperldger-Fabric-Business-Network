@@ -36,3 +36,16 @@ query selectDelegationFromId {
       SELECT org.basicnet.Delegation WHERE (dlID == _$checkID)
 }
 
+query selectDelegationFromCFDoc {
+  description: "Select all delegation belong to a doctor by his $CFD"
+  statement:
+      SELECT org.basicnet.Delegation WHERE (doctor.cfD == _$CFD)
+}
+
+query selectDelegationFromCFPat {
+  description: "Select all delegation belong to a patient by his $CFP"
+  statement:
+      SELECT org.basicnet.Delegation WHERE (patient.cfP == _$CFP)
+}
+
+
