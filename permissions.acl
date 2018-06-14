@@ -31,22 +31,30 @@ rule NetworkAdminSystem {
     action: ALLOW
 }
 
-rule DoctorRuleNetwork {
-  description: "Basic rule for doctors to see network"
-  participant: "org.basicnet.Doctor"
-  operation: READ
-  resource: "org.hyperledger.composer.system.**"
-  condition: (d.getIdentifier() === d.getIDentifier())
-  action:ALLOW
+rule DoctorsCanSeeOnlyHimself {
+  description: "Trader can see and update their own record only"
+  participant(t): "org.basicnet.Doctor"
+  operation: READ, UPDATE
+  resource(v): "org.basicnet.Doctor"
+  condition: (v.getIdentifier() == t.getIdentifier())
+  action: ALLOW
 }
 
-rule DoctorRule {
-  description: "Basic rule for doctors"
+rule NetworkAdminSystemDoc {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.basicnet.Doctor"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule doctorDelegation {
+  description: "Doctor can see only his delegation"
   participant(d): "org.basicnet.Doctor"
-  operation: READ
-  resource(d): "org.basicnet.Doctor"
-  condition: (d.getIdentifier() === d.getIDentifier())
-  action:ALLOW
+  operation: ALL
+  resource(t): "org.basicnet.Delegation"
+  condition: (d.getIdentifier() == t.doctor.getIdentifier())
+  action: ALLOW
 }
 
 rule DoctorCanSeeOnlyHisPatients {
@@ -60,4 +68,47 @@ rule DoctorCanSeeOnlyHisPatients {
   action: ALLOW
 }
 
+rule DoctorCanCreateDelegationRequest {
+  description: "Doctor can make a request transiction"
+  participant: "org.basicnet.Doctor"
+  operation: ALL 
+  resource: "org.basicnet.Delegation_request"
+  action:ALLOW
+}
+
+rule DoctorCanDestroyDelegation {
+  description: "Doctor can malke a destroy request"
+  participant: "org.basicnet.Doctor"
+  operation: ALL 
+  resource: "org.basicnet.Destroy_delegation"
+  action: ALLOW
+}
+
+rule PatientCanSeeOnlyHimSelf {
+  description: "patient can see only himself"
+  participant(p): "org.basicnet.Patient"
+  operation: ALL
+  resource(r): "org.basicnet.Patient"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
+}
+
+rule PatientCanSeeOnlyHisDoctors {
+  description: "patient can see only his doctors"
+  participant(p): "org.basicnet.Patient"
+  operation: READ
+  resource(r): "org.basicnet.Doctor"
+  condition: (r.list_of_patients.some(function (patient) {
+        return patient.getIdentifier() === p.getIdentifier();  
+        }))
+  action: ALLOW
+}
+
+rule PatientCanDestroyDelegation {
+  description: "Patient can malke a destroy request"
+  participant: "org.basicnet.Patient"
+  operation: ALL 
+  resource: "org.basicnet.Destroy_delegation"
+  action: ALLOW
+}
 
