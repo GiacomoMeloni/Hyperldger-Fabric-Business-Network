@@ -104,11 +104,27 @@ rule PatientCanSeeOnlyHisDoctors {
   action: ALLOW
 }
 
+rule PatientCanSeeOnlyHisDelegation {
+  description: "Patient can see only his delegation"
+  participant(p): "org.basicnet.Patient"
+  operation: ALL 
+  resource(r): "org.basicnet.Delegation"
+  condition: (p.getIdentifier() == r.patient.getIdentifier())
+  action: ALLOW
+}
+
 rule PatientCanDestroyDelegation {
-  description: "Patient can malke a destroy request"
+  description: "Patient can make a destroy request"
   participant: "org.basicnet.Patient"
   operation: ALL 
   resource: "org.basicnet.Destroy_delegation"
   action: ALLOW
 }
 
+rule PatientCanConfirmDelegation {
+  description: "Patient can make a confirm transaction"
+  participant: "org.basicnet.Patient"
+  operation: ALL
+  resource: "org.basicnet.Delegation_confirmation"
+  action: ALLOW 
+}
