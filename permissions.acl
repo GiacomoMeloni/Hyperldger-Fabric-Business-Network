@@ -84,6 +84,14 @@ rule DoctorCanDestroyDelegation {
   action: ALLOW
 }
 
+rule NetworkAdminSystemPat {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.basicnet.Patient"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
 rule PatientCanSeeOnlyHimSelf {
   description: "patient can see only himself"
   participant(p): "org.basicnet.Patient"
@@ -95,12 +103,9 @@ rule PatientCanSeeOnlyHimSelf {
 
 rule PatientCanSeeOnlyHisDoctors {
   description: "patient can see only his doctors"
-  participant(p): "org.basicnet.Patient"
-  operation: READ
-  resource(r): "org.basicnet.Doctor"
-  condition: (r.list_of_patients.some(function (patient) {
-        return patient.getIdentifier() === p.getIdentifier();  
-        }))
+  participant: "org.basicnet.Patient"
+  operation: READ, UPDATE
+  resource: "org.basicnet.Doctor"
   action: ALLOW
 }
 
